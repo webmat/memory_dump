@@ -1,5 +1,9 @@
 require 'ruby-debug'
 require 'pp'
+
+# To know more about bindings, check out
+# http://onestepback.org/index.cgi/Tech/Ruby/RubyBindings.rdoc
+
 module MemoryDump
   VARIABLE_TYPES = {
     :local_variables    => nil, 
