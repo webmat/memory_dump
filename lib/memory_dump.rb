@@ -12,7 +12,8 @@ module MemoryDump
   
   NOISY = [:global_variables, :constants]
   
-  def dump(b)
+  # Just call 'dump'
+  def dump(b=binding)
     info = VARIABLE_TYPES.reject{|k,v| NOISY.include? k}.inject({}) do |memo, pair|
       what, how = *pair
       memo[what] = fetch how, b
