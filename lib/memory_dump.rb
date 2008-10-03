@@ -15,7 +15,7 @@ module MemoryDump
   
   # We go fetch these informations directly.
   FLAT_INFO = {
-    :class              => 'self.class.to_s',
+    :class              => 'self.class',
     :ancestors          => 'self.class.ancestors',
     :backtrace          => 'caller'
   }
