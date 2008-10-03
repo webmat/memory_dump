@@ -16,6 +16,26 @@ class DumpTest < Test::Unit::TestCase
     end
   end
   
+  def self.should_do_the_basic_detections
+    should "detect it's an instance of the Dummy class" do
+      assert_equal Dummy, dmp[:class]
+    end
+    
+    should "detect the Dummy class' ancestors" do
+      assert dmp[:ancestors].include?(Dummy)
+      assert dmp[:ancestors].include?(Object)
+    end
+    
+    should_include_variable_matching('local_variable', /local.*instance/)
+    should_include_variable_matching('@instance_variable', /instance\svalue/)
+    should_include_variable_matching('@@class_variable', /class\svalue/)
+    
+    should 'capture a backtrace that includes dummy.rb' do
+      assert dmp[:backtrace].detect{|line| 
+        %r{#{Regexp.escape('test/helpers/dummy.rb')}} =~ line}
+    end
+  end
+  
   context "with a dummy class instance" do
     setup do
       @dummy = Dummy.new
@@ -24,23 +44,7 @@ class DumpTest < Test::Unit::TestCase
     context "calling a non verbose dump in an instance method" do
       setup { @dmp = dummy.call_dump }
       
-      should "detect it's an instance of the Dummy class" do
-        assert_equal Dummy, dmp[:class]
-      end
-      
-      should "detect the Dummy class' ancestors" do
-        assert dmp[:ancestors].include?(Dummy)
-        assert dmp[:ancestors].include?(Object)
-      end
-      
-      should_include_variable_matching('local_variable', /local.*instance/)
-      should_include_variable_matching('@instance_variable', /instance\svalue/)
-      should_include_variable_matching('@@class_variable', /class\svalue/)
-      
-      should 'capture a backtrace that includes dummy.rb' do
-        assert dmp[:backtrace].detect{|line| 
-          %r{#{Regexp.escape('test/helpers/dummy.rb')}} =~ line}
-      end
+      should_do_the_basic_detections
       
       should "not include the global variables" do
         assert_nil dmp[:global_variables]
@@ -50,5 +54,20 @@ class DumpTest < Test::Unit::TestCase
         assert_nil dmp[:constants]
       end
     end
+    
+    context "calling the verbose dump in an instance method" do
+      setup { @dmp = dummy.call_verbose_dump }
+      
+      should_do_the_basic_detections
+      
+      should "include the global variables" do
+        assert dmp[:global_variables]
+      end
+      
+      should "include the constants" do
+        assert dmp[:constants]
+      end
+    end
   end
+  
 end
