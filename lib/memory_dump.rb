@@ -12,7 +12,8 @@ module MemoryDump
   }
   
   FLAT_INFO = {
-    :class              => 'self.class.to_s'
+    :class              => 'self.class.to_s',
+    :ancestors          => 'self.class.ancestors'
   }
   
   NOISY = [:global_variables, :constants]
