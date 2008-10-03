@@ -26,17 +26,10 @@ module MemoryDump
   #   dump binding
   # or
   #   dump {}
-  def self.dump(b, &block)
-    case
-    when block_given?
-      b=block.binding
-    when b.is_a?(Binding)
-    else
-      raise ArgumentError, "Either pass 'binding' as the only argument to dump or pass an empty block"
-    end
+  def self.dump(b, options)
+    nested = options[:verbose] ? NESTED_INFO : NESTED_INFO.reject{|k,v| NOISY.include? k}
     
-    #info_nested  = NESTED_INFO.reject{|k,v| NOISY.include? k}.inject({}) { |memo, pair|
-    info_nested  = NESTED_INFO.inject({}) { |memo, pair|
+    info_nested  = nested.inject({}) { |memo, pair|
       what, how  = *pair
       memo[what] = fetch_nested how, b
       memo
@@ -60,6 +53,17 @@ module MemoryDump
   end
 end
 
-def dump(b=nil, &block)
-  MemoryDump.dump(b, &block)
+def dump(*args, &block)
+  b=args.detect{|a| a.is_a? Binding}
+  
+  case
+  when block_given?
+    b=block.binding
+  when b.is_a?(Binding)
+  else
+    raise ArgumentError, "Either pass 'binding' as the only argument to dump or pass an empty block"
+  end
+  
+  (options = {})[:verbose] = !(args & [:v, :verbose]).empty?
+  MemoryDump.dump(b, options)
 end
