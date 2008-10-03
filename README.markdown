@@ -7,9 +7,11 @@ By using Ruby's Bindings, I can tell you a lot of stuff :-)
 Usage
 ===
 
+After requiring memory_dump, insert the following line anywhere in your code:
+
     dump{}
 
-Will give you a nested Hash containing most variables accessible from where you called it, 
+This will give you a nested Hash containing most variables accessible from where you called it, 
 as well as a few other interesting tidbits:
 
     {:instance_variables=>{"@instance_variable"=>"instance var's value"},
@@ -24,8 +26,8 @@ If you're ready for an explosion of (very interesting) information, call it in v
     dump(:verbose){}
     dump(:v){}
 
-You'll get an additional hash of all the global variables and their values, as well as an
-array of all constants accessible from that binding.
+Included in the previous hash will be an additional hash containing all the global variables 
+and their values, as well as an array of all constants accessible from that binding.
 
 Other stuff
 ===
