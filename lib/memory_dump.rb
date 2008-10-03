@@ -1,6 +1,3 @@
-require 'ruby-debug'
-require 'pp'
-
 module MemoryDump
   # Nested stuff gets eval'ed twice.
   # We find out what the names are (e.g. variable name) and then find out their value.
