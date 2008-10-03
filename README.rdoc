@@ -1,0 +1,5 @@
+
+
+To know more about bindings, check out
+http://onestepback.org/index.cgi/Tech/Ruby/RubyBindings.rdoc
+
