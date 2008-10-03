@@ -1,21 +1,31 @@
 class Dummy
   DUMMY_CONST = 'dummy const value'
   
-  @@class_attribute = 'dummy class value'
+  @@class_variable = 'dummy class value'
   
-  attr_accessor :instance_attribute
+  attr_accessor :instance_variable
   
   def initialize
-    @instance_attribute = 'dummy instance value'
+    @instance_variable = 'dummy instance value'
   end
   
   def call_dump
-    var = 'local variable in instance method'
+    local_variable = 'local variable in instance method'
     dump{}
   end
   
+  def call_verbose_dump
+    local_variable = 'local variable in instance method'
+    dump(:v){}
+  end
+  
   def self.call_dump
-    var = 'local variable in class method'
+    local_variable = 'local variable in class method'
     dump{}
+  end
+  
+  def self.call_verbose_dump
+    local_variable = 'local variable in class method'
+    dump(:v){}
   end
 end
