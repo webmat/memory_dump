@@ -26,7 +26,7 @@ module MemoryDump
   #   dump binding
   # or
   #   dump {}
-  def dump(b=nil, &block)
+  def self.dump(b, &block)
     case
     when block_given?
       b=block.binding
@@ -35,7 +35,8 @@ module MemoryDump
       raise ArgumentError, "Either pass 'binding' as the only argument to dump or pass an empty block"
     end
     
-    info_nested  = NESTED_INFO.reject{|k,v| NOISY.include? k}.inject({}) { |memo, pair|
+    #info_nested  = NESTED_INFO.reject{|k,v| NOISY.include? k}.inject({}) { |memo, pair|
+    info_nested  = NESTED_INFO.inject({}) { |memo, pair|
       what, how  = *pair
       memo[what] = fetch_nested how, b
       memo
@@ -48,11 +49,17 @@ module MemoryDump
     return info_nested.merge(info_flat)
   end
   
-  def fetch_flat(how, b)
+  protected
+  
+  def self.fetch_flat(how, b)
     eval how, b
   end
   
-  def fetch_nested(how, b)
+  def self.fetch_nested(how, b)
     (eval how, b).inject({}) {|memo, var| memo[var] = eval var, b; memo}
   end
+end
+
+def dump(b=nil, &block)
+  MemoryDump.dump(b, &block)
 end
