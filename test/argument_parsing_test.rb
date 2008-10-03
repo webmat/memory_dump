@@ -8,18 +8,18 @@ class ArgumentParsingTest < Test::Unit::TestCase
     MemoryDump.expects(:dump).with{|b, arg_options| options == arg_options }
   end
   
-  def self.should_be_gotten_from_arguments(string)
-    should "accept #{string}" do
+  def self.should_be_obtained_from_arguments(string)
+    should "be obtained when calling dump(#{string})" do
       dump(eval(string)){}
     end
   end
   
-  context 'to specify verbosity' do
+  context 'expected option: verbosity' do
     setup do
       expected_options(:verbose => true)
     end
-    should_be_gotten_from_arguments ':v'
-    should_be_gotten_from_arguments ':verbose'
-    should_be_gotten_from_arguments '{:verbose => true}'
+    should_be_obtained_from_arguments ':v'
+    should_be_obtained_from_arguments ':verbose'
+    should_be_obtained_from_arguments '{:verbose => true}'
   end
 end
