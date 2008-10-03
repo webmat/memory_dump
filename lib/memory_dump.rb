@@ -2,6 +2,8 @@ require 'ruby-debug'
 require 'pp'
 
 module MemoryDump
+  # Nested stuff gets eval'ed twice.
+  # We find out what the names are (e.g. variable name) and then find out their value.
   NESTED_INFO = {
     # what gets fetched => how it gets fetched
     :local_variables    => 'local_variables',
@@ -11,9 +13,11 @@ module MemoryDump
     :constants          => 'Module.constants'
   }
   
+  # We go fetch these informations directly.
   FLAT_INFO = {
     :class              => 'self.class.to_s',
-    :ancestors          => 'self.class.ancestors'
+    :ancestors          => 'self.class.ancestors',
+    :backtrace          => 'caller'
   }
   
   NOISY = [:global_variables, :constants]
